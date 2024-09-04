@@ -39,4 +39,33 @@ async function findAll() {
   }
 }
 
-module.exports = { create, getOneByOrderId, findAll };
+async function updateOne(orderId, updateData) {
+  try {
+    // Find the order by ID
+    const existingOrder = await Order.findOne ({ order_id: orderId });
+    if (!existingOrder) {
+      throw new Error('Order not found');
+    }
+
+    // Update the order
+    const updatedOrder = await Order.findOneAndUpdate({ order_id: orderId }, updateData, { new: true });
+
+    return updatedOrder;
+  }
+  catch (error) {
+    console.error('Error updating order:', error);
+    throw error;
+  }   
+}
+
+async function deleteOneByOrderId(orderId) {
+  try {
+    const order = await Order.findOneAndDelete({ order_id: orderId });
+    return order;
+  } catch (error) {
+    console.error('Error deleting order:', error);
+    throw error;
+  }
+}
+
+module.exports = { create, getOneByOrderId, findAll, updateOne, deleteOneByOrderId };

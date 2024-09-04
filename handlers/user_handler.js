@@ -60,6 +60,17 @@ async function login(req, res) {
   }
 }
 
+async function logout(req, res) {
+  try {
+    const token = req.headers.authorization;
+    await userUsecase.logout(token);
+    res.json({ message: "Success logout!" });
+  } catch (error) {
+    console.error('Error logout: ', error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+}
+
 // Handler to update a user by their ID
 async function updateOne(req, res) {
   try {
@@ -73,4 +84,15 @@ async function updateOne(req, res) {
   }
 }
 
-module.exports = { getOneByUserId, getOneByEmail, getList, register, login, updateOne };
+async function deleteOne(req, res) {
+  try {
+    const userId = req.params.id;
+    await userUsecase.deleteOne(userId);
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+}
+
+module.exports = { getOneByUserId, getOneByEmail, getList, register, login, updateOne, deleteOne };

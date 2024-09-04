@@ -29,4 +29,35 @@ const getList = async () => {
     }
 }
 
-module.exports = { create, getList};
+const getOneByRoleId = async (roleId) => {
+    try {
+        const role = await repositories.getOneByRoleId(roleId);
+        return role;
+    } catch (error) {
+        throw new Error('Failed to get role by ID');
+    }
+}
+
+const updateOneByRoleId = async (roleId, roleData) => {
+    try {
+        const role = await repositories.getOneByRoleId(roleId);
+        if (!role) {
+            throw new Error('Role not found');
+        }
+        const updatedRole = await repositories.updateOne(roleId, roleData);
+        return updatedRole;
+    } catch (error) {
+        throw new Error('Failed to update role by ID');
+    }
+}
+
+async function deleteOneByRoleId(roleId) {
+    try {
+        const role = await repositories.deleteOneByRoleId(roleId);
+        return role;
+    } catch (error) {
+        throw new Error('Failed to delete role by ID');
+    }
+}
+
+module.exports = { create, getList, getOneByRoleId, updateOneByRoleId, deleteOneByRoleId };
